@@ -10,7 +10,7 @@ api_key = 'q83082FKrJBQmMxUrpVrEcaPhummrxW7L72rzgEU18uuGCCeDlkjajQ2CMSaob3a'
 api_secret = 'XSVPcjjDh5WUZgCx5RZ7DOHWlBp3NxZUnxXmFkZ37hkAnxc5RqR59xzJ0YSXE0Fq'
 
 def place_order(pair, side, quantity, stop_loss_percent, take_profit_percent):
-    client = Client(api_key, api_secret, testnet=True)  # 設定 testnet=False 以使用實際的帳戶
+    client = Client(api_key, api_secret)  # 設定 testnet=False 以使用實際的帳戶
     
     symbol = pair.upper()
     price = client.futures_symbol_ticker(symbol=symbol)['price']
