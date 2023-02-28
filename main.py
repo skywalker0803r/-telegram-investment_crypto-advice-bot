@@ -5,6 +5,7 @@ import datetime
 import pandas as pd
 from binance import Client
 import requests
+import time
 
 def send_to_telegram(message):
     apiToken = '5850662274:AAGeKZqM1JfQfh3CrSKG6BZ9pEvDajdBUqs'
