@@ -1,36 +1,28 @@
 from binance.client import Client
 import numpy as np
+from binance.enums import *
 import finlab_crypto
 from finlab_crypto import Strategy
 import pandas as pd
 from binance import Client
 import requests
 
+# 建立客戶端
 api_key = 'q83082FKrJBQmMxUrpVrEcaPhummrxW7L72rzgEU18uuGCCeDlkjajQ2CMSaob3a'
 api_secret = 'XSVPcjjDh5WUZgCx5RZ7DOHWlBp3NxZUnxXmFkZ37hkAnxc5RqR59xzJ0YSXE0Fq'
+client = Client(api_key=api_key,api_secret=api_secret)
 
-def place_order(pair, side, quantity, stop_loss_percent, take_profit_percent):
-    client = Client(api_key, api_secret)  # 設定 testnet=False 以使用實際的帳戶
-    
-    symbol = pair.upper()
-    price = client.futures_symbol_ticker(symbol=symbol)['price']
-    price = float(price)
-
+# 定義下單函數
+def place_order(side,client=client,quantity = 0.001):
     if side == 'BUY':
-        stop_loss_price = price * (1 - stop_loss_percent / 100)
-        take_profit_price = price * (1 + take_profit_percent / 100)
-    elif side == 'SELL':
-        stop_loss_price = price * (1 + stop_loss_percent / 100)
-        take_profit_price = price * (1 - take_profit_percent / 100)
-    else:
-        raise ValueError('Invalid side, must be BUY or SELL')
-
-    quantity = np.round(float(quantity/price),2)  # 計算下單量，小數點後 2 位
-    order = client.futures_create_order(symbol=symbol, side=side, type='LIMIT', timeInForce='GTC', quantity=quantity, price=price, stopPrice=stop_loss_price, closePosition=False, reduceOnly=False)
-    client.futures_create_order(symbol=symbol, side='SELL' if side == 'BUY' else 'BUY', type='TAKE_PROFIT_MARKET', timeInForce='GTC', stopPrice=take_profit_price, closePosition=True, reduceOnly=True)
-
+       print('buy quantity',quantity)
+       order = client.create_order(symbol='BTCUSDT',side=SIDE_BUY,type=ORDER_TYPE_MARKET,quantity=quantity)
+    if side == 'SELL':
+       print('sell quantity',quantity)
+       order = client.create_order(symbol='BTCUSDT',side=SIDE_SELL,type=ORDER_TYPE_MARKET,quantity=quantity)
     return order
 
+# 定義發送電報函數
 def send_to_telegram(message):
     apiToken = '5850662274:AAGeKZqM1JfQfh3CrSKG6BZ9pEvDajdBUqs'
     chatID = '1567262377'
@@ -41,13 +33,13 @@ def send_to_telegram(message):
     except Exception as e:
         print(e)
 
+# 定義漲跌訊號函數
 def get_signal(
       pair='BTCUSDT',
       freq='15m',
       n_bar = 10000,
-      client = Client(api_key=api_key,
-                      api_secret=api_secret)
-                      ):
+      client = client
+      ):
   # get the pair ohlcv data
   ohlcv = finlab_crypto.crawler.get_nbars_binance(pair,freq,n_bar,client)
   
