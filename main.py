@@ -75,6 +75,7 @@ def get_signal(
 if __name__ == '__main__':
     while True:
         side = get_signal()
+        print('side:',side)
         if side != 'pass':
             send_to_telegram(message=side)
         time.sleep(60)
