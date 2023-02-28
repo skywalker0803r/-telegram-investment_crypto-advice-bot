@@ -94,4 +94,4 @@ def get_signal(
   # if sell == 1
   if table[['sell']].values[0][0] == 1:
      signal = 'SELL'
-  return signal
+  return signal,n1,n2
