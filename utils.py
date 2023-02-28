@@ -6,9 +6,10 @@ import pandas as pd
 from binance import Client
 import requests
 
+api_key = 'q83082FKrJBQmMxUrpVrEcaPhummrxW7L72rzgEU18uuGCCeDlkjajQ2CMSaob3a'
+api_secret = 'XSVPcjjDh5WUZgCx5RZ7DOHWlBp3NxZUnxXmFkZ37hkAnxc5RqR59xzJ0YSXE0Fq'
+
 def place_order(pair, side, quantity, stop_loss_percent, take_profit_percent):
-    api_key = 'IMe4eYde4ivFkH98FeDgAppDEqufxAVsqiciR3AQyucvpl01Obcm7uIlFhDDd19p'
-    api_secret = '770u8vCFNlNzkn4TqIQDACed8J9uzyxBnuam1RHj8u9tB34lGU7roVI4Hi7gCjaG'
     client = Client(api_key, api_secret, testnet=True)  # 設定 testnet=False 以使用實際的帳戶
     
     symbol = pair.upper()
@@ -44,8 +45,8 @@ def get_signal(
       pair='BTCUSDT',
       freq='15m',
       n_bar = 10000,
-      client = Client(api_key='IMe4eYde4ivFkH98FeDgAppDEqufxAVsqiciR3AQyucvpl01Obcm7uIlFhDDd19p',
-                      api_secret='770u8vCFNlNzkn4TqIQDACed8J9uzyxBnuam1RHj8u9tB34lGU7roVI4Hi7gCjaG')
+      client = Client(api_key=api_key,
+                      api_secret=api_secret)
                       ):
   # get the pair ohlcv data
   ohlcv = finlab_crypto.crawler.get_nbars_binance(pair,freq,n_bar,client)
@@ -86,11 +87,11 @@ def get_signal(
   table = table.replace(0,np.nan).tail(1)
   # if buy and sell eqal np.nan pass
   if table[['buy','sell']].sum().sum() == 0:
-     signal = 'pass'
+     signal = 'PASS'
   # if buy == 1
   if table[['buy']].values[0][0] == 1:
-     signal = 'buy'
+     signal = 'BUY'
   # if sell == 1
   if table[['sell']].values[0][0] == 1:
-     signal = 'sell'
+     signal = 'SELL'
   return signal
