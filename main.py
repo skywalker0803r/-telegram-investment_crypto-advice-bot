@@ -19,5 +19,5 @@ if __name__ == '__main__':
         if side != 'PASS': # 判斷是否出現方向
             send_to_telegram(message=side)# 發送電報
             place_order(side) # 根據訊號方向下單
-        time.sleep(60) # 等一分鐘
+        time.sleep(60*15) # 等15分鐘出現下一根k棒
         os.system("cls") # 清除屏幕
