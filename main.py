@@ -1,11 +1,11 @@
-from utils import place_order,send_to_telegram,get_signal
+from utils import place_order,send_to_telegram,get_signal,get_signal_fast
 import time
 import os
 from datetime import datetime
 
 if __name__ == '__main__':
     while True:# 持續執行
-        side,n1,n2 = get_signal() # 取得交易訊號
+        side,n1,n2 = get_signal_fast() # 取得交易訊號
         時間 = datetime.now().strftime('%Y-%m-%d %H:%M:%S') # 時間
         print('''
  /\_/\  
