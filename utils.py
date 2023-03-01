@@ -87,3 +87,36 @@ def get_signal(
   if table[['sell']].values[0][0] == 1:
      signal = 'SELL'
   return signal,n1,n2
+
+def get_signal_fast(
+      pair='BTCUSDT',
+      freq='15m',
+      n_bar = 10000,
+      client = client,
+      n1 = 65,
+      n2 = 95,
+      ):
+  
+  # get data
+  ohlcv = finlab_crypto.crawler.get_nbars_binance(pair,freq,n_bar,client)
+  
+  # get signal table
+  table = pd.DataFrame()
+  table['close'] = ohlcv.close
+  table['n1'] = ohlcv.close.rolling(n1).mean()
+  table['n2'] = ohlcv.close.rolling(n2).mean()
+  table['buy'] = ((table['n1'] > table['n2']) & (table['n1'].shift() < table['n2'].shift())).astype(int)
+  table['sell'] = ((table['n1'] < table['n2']) & (table['n1'].shift() > table['n2'].shift())).astype(int)
+  table = table.replace(0,np.nan).tail(1)
+  
+  # if buy and sell eqal np.nan pass
+  if table[['buy','sell']].sum().sum() == 0:
+     signal = 'PASS'
+  # if buy == 1
+  if table[['buy']].values[0][0] == 1:
+     signal = 'BUY'
+  # if sell == 1
+  if table[['sell']].values[0][0] == 1:
+     signal = 'SELL'
+  
+  return signal,n1,n2
