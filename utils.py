@@ -14,12 +14,15 @@ client = Client(api_key=api_key,api_secret=api_secret)
 
 # 定義下單函數
 def place_order(side,client=client,quantity = 0.001):
-    if side == 'BUY':
-       print('buy quantity',quantity)
-       order = client.create_order(symbol='BTCUSDT',side=SIDE_BUY,type=ORDER_TYPE_MARKET,quantity=quantity)
-    if side == 'SELL':
-       print('sell quantity',quantity)
-       order = client.create_order(symbol='BTCUSDT',side=SIDE_SELL,type=ORDER_TYPE_MARKET,quantity=quantity)
+    usdt_balance = client.get_asset_balance(asset='USDT')
+    btc_balance = client.get_asset_balance(asset='BTC')
+    btc_price = client.get_symbol_ticker(symbol='BTCUSDT')
+    if (side == 'BUY') and ((usdt_balance / btc_price) > quantity) :
+      order = client.create_order(symbol='BTCUSDT',side=SIDE_BUY,type=ORDER_TYPE_MARKET,quantity=quantity)
+      print(f'buy quantity:{quantity} BTC success',quantity)
+    if (side == 'SELL') and (btc_balance > quantity):
+      order = client.create_order(symbol='BTCUSDT',side=SIDE_SELL,type=ORDER_TYPE_MARKET,quantity=quantity)
+      print(f'sell quantity:{quantity} BTC success',quantity)
     return order
 
 # 定義發送電報函數
