@@ -13,7 +13,7 @@ api_secret = 'XSVPcjjDh5WUZgCx5RZ7DOHWlBp3NxZUnxXmFkZ37hkAnxc5RqR59xzJ0YSXE0Fq'
 client = Client(api_key=api_key,api_secret=api_secret)
 
 # 定義下單函數
-def place_order(side,client=client,quantity = 0.001):
+def place_order(side,quantity,client=client,):
     usdt_balance = client.get_asset_balance(asset='USDT')
     btc_balance = client.get_asset_balance(asset='BTC')
     btc_price = client.get_symbol_ticker(symbol='BTCUSDT')
