@@ -6,10 +6,9 @@ from finlab_crypto import Strategy
 import pandas as pd
 from binance import Client
 import requests
+from tokens import api_key,api_secret,apiToken,chatID
 
 # 建立客戶端
-api_key = 'q83082FKrJBQmMxUrpVrEcaPhummrxW7L72rzgEU18uuGCCeDlkjajQ2CMSaob3a'
-api_secret = 'XSVPcjjDh5WUZgCx5RZ7DOHWlBp3NxZUnxXmFkZ37hkAnxc5RqR59xzJ0YSXE0Fq'
 client = Client(api_key=api_key,api_secret=api_secret)
 
 # 定義下單函數
@@ -27,8 +26,6 @@ def place_order(side,quantity,client=client,):
 
 # 定義發送電報函數
 def send_to_telegram(message):
-    apiToken = '5850662274:AAGeKZqM1JfQfh3CrSKG6BZ9pEvDajdBUqs'
-    chatID = '1567262377'
     apiURL = f'https://api.telegram.org/bot{apiToken}/sendMessage'
     try:
         response = requests.post(apiURL, json={'chat_id': chatID, 'text': message})
