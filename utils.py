@@ -12,16 +12,16 @@ from tokens import api_key,api_secret,apiToken,chatID
 client = Client(api_key=api_key,api_secret=api_secret)
 
 # 定義下單函數
-def place_order(side,quantity,client=client,):
-    usdt_balance = client.get_asset_balance(asset='USDT')
-    btc_balance = client.get_asset_balance(asset='BTC')
-    btc_price = client.get_symbol_ticker(symbol='BTCUSDT')
+def place_order(side,quantity,client=client):
+    usdt_balance = float(client.get_asset_balance(asset='USDT')['free'])
+    btc_balance = float(client.get_asset_balance(asset='BTC')['free'])
+    btc_price = float(client.get_symbol_ticker(symbol='BTCUSDT')['price'])
     if (side == 'BUY') and ((usdt_balance / btc_price) > quantity) :
       order = client.create_order(symbol='BTCUSDT',side=SIDE_BUY,type=ORDER_TYPE_MARKET,quantity=quantity)
       print(f'buy quantity:{quantity} BTC success',quantity)
     if (side == 'SELL') and (btc_balance > quantity):
       order = client.create_order(symbol='BTCUSDT',side=SIDE_SELL,type=ORDER_TYPE_MARKET,quantity=quantity)
-      print(f'sell quantity:{quantity} BTC success',quantity)
+      print(f'sell quantity:{quantity} BTC success')
     return order
 
 # 定義發送電報函數
