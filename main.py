@@ -17,7 +17,7 @@ if __name__ == '__main__':
         print(f'<比特幣自動交易程序> side:{side} n1:{n1} n2:{n2} current_time:{時間}') #打印信息
         
         if side != 'PASS': # 判斷是否出現方向
-            send_to_telegram(message=f"您好~剛剛機器人用幣安API下了一筆比特幣{side}單")# 發送電報
             place_order(side,quantity=0.003) # 根據訊號方向下單
+            send_to_telegram(message=f"您好~剛剛機器人用幣安API下了一筆比特幣{side}單")# 發送電報
         time.sleep(60*15) # 等15分鐘出現下一根k棒
         os.system("cls") # 清除屏幕

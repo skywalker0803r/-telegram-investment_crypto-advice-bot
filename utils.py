@@ -17,11 +17,17 @@ def place_order(side,quantity,client=client):
     btc_balance = float(client.get_asset_balance(asset='BTC')['free'])
     btc_price = float(client.get_symbol_ticker(symbol='BTCUSDT')['price'])
     if (side == 'BUY') and ((usdt_balance / btc_price) > quantity) :
-      order = client.create_order(symbol='BTCUSDT',side=SIDE_BUY,type=ORDER_TYPE_MARKET,quantity=quantity)
-      print(f'buy quantity:{quantity} BTC success',quantity)
+      try:
+         order = client.create_order(symbol='BTCUSDT',side=SIDE_BUY,type=ORDER_TYPE_MARKET,quantity=quantity)
+         print(f'buy quantity:{quantity} BTC success',quantity)
+      except Exception as e:
+         print(f'while do {side} BTC action occur error:{e}')
     if (side == 'SELL') and (btc_balance > quantity):
-      order = client.create_order(symbol='BTCUSDT',side=SIDE_SELL,type=ORDER_TYPE_MARKET,quantity=quantity)
-      print(f'sell quantity:{quantity} BTC success')
+      try:
+         order = client.create_order(symbol='BTCUSDT',side=SIDE_SELL,type=ORDER_TYPE_MARKET,quantity=quantity)
+         print(f'sell quantity:{quantity} BTC success')
+      except Exception as e:
+         print(f'while do {side} BTC action occur error:{e}')
     return order
 
 # 定義發送電報函數
