@@ -7,6 +7,7 @@ import pandas as pd
 from binance import Client
 import requests
 from tokens import api_key,api_secret,apiToken,chatID
+from finta import TA
 
 # 建立客戶端
 client = Client(api_key=api_key,api_secret=api_secret)
@@ -82,4 +83,4 @@ def get_rsi_signal(
         signal = 'BUY'
     if table[['sell']].values[0][0] == 1:
         signal = 'SELL'
-  return signal,period
+    return signal,period

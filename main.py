@@ -1,12 +1,12 @@
-from utils import place_order,send_to_telegram,get_signal,get_signal_fast
+from utils import *
 import time
 import os
 from datetime import datetime
 
 if __name__ == '__main__':
     while True:# 持續執行
-        side,n1,n2 = get_signal_fast() # 取得交易訊號
-        時間 = datetime.now().strftime('%Y-%m-%d %H:%M:%S') # 時間
+        side,period = get_rsi_signal()
+        current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S') 
         print('''
  /\_/\  
 ( o   o )
@@ -14,10 +14,23 @@ if __name__ == '__main__':
  (        )
   (      )
 ''')
-        print(f'<比特幣自動交易程序> side:{side} n1:{n1} n2:{n2} current_time:{時間}') #打印信息
+        print(f'<比特幣自動交易程序> current_side:{side} current_time:{current_time}')
         
-        if side != 'PASS': # 判斷是否出現方向
-            place_order(side,quantity=0.003) # 根據訊號方向下單
-            send_to_telegram(message=f"您好~剛剛機器人用幣安API下了一筆比特幣{side}單")# 發送電報
-        time.sleep(60*15) # 等15分鐘出現下一根k棒
-        os.system("cls") # 清除屏幕
+        if side != 'PASS':
+            place_order(side,quantity=0.003)
+            send_to_telegram(message=f"您好~剛剛機器人用幣安API下了一筆比特幣{side}單")
+        # 下完單以後等待下一根k棒出來
+        t = 0
+        while t <= 60*15:
+            current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            print('''
+ /\_/\  
+( o   o )
+=(  =^=  )=
+ (        )
+  (      )
+''')
+            print(f'<比特幣自動交易程序>,上一根k棒方向為:{side},等待下一根k棒出來中,current_time:{current_time}')
+            time.sleep(1)
+            t += 1
+            os.system("cls") # 清除屏幕
