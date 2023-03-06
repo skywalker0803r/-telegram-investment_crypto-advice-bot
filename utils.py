@@ -126,3 +126,28 @@ def get_signal_fast(
      signal = 'SELL'
   
   return signal,n1,n2
+
+# RSI策略 2023/03/06研發
+def get_rsi_signal(
+      pair='BTCUSDT',
+      freq='15m',
+      n_bar = 10000,
+      period = 14,
+      client = client):
+    
+    # get data
+    ohlcv = finlab_crypto.crawler.get_nbars_binance(pair,freq,n_bar,client)
+  
+    # create signal table
+    table = pd.DataFrame()
+    table['rsi'] = TA.RSI(ohlcv,period=period)
+    table['buy'] = table['rsi'] <= 20 
+    table['sell'] = table['rsi'] >= 80 
+    table = table.replace(0,np.nan).tail(1)
+    if table[['buy','sell']].sum().sum() == 0:
+        signal = 'PASS'
+    if table[['buy']].values[0][0] == 1:
+        signal = 'BUY'
+    if table[['sell']].values[0][0] == 1:
+        signal = 'SELL'
+  return signal,period
