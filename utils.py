@@ -127,7 +127,7 @@ def get_signal_fast(
   
   return signal,n1,n2
 
-# RSI策略 2023/03/06研發
+# RSI策略 2023/03/06研發 報酬率15% 最大回撤-0.08%
 def get_rsi_signal(
       pair='BTCUSDT',
       freq='15m',
