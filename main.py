@@ -5,8 +5,12 @@ from datetime import datetime
 
 if __name__ == '__main__':
     while True:# 持續執行
-        side,period = get_rsi_signal()
-        current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S') 
+        try:
+            side,period = get_rsi_signal()
+        except Exception as e:
+            print(e)
+            send_to_telegram(message=f"您好~剛剛機器人發生錯誤{e}")
+        
         print('''
  /\_/\  
 ( o   o )
@@ -14,8 +18,10 @@ if __name__ == '__main__':
  (        )
   (      )
 ''')
+        current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S') 
         print(f'<比特幣自動交易程序> current_side:{side} current_time:{current_time}')
         
+        # 判斷是否下單
         if side != 'PASS':
             place_order(side,quantity=0.003)
             send_to_telegram(message=f"您好~剛剛機器人用幣安API下了一筆比特幣{side}單")
